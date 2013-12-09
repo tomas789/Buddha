@@ -13,8 +13,8 @@ void Buddha::worker(uint64_t from, uint64_t to) {
     std::vector<uint64_t> local_data(thread_vector_size_);
 
     floating_type radius_sqr = radius_ * radius_;
-    floating_type subpixel_width  = radius_ / x_size_;
-    floating_type subpixel_height = radius_ / y_size_;
+    floating_type subpixel_width  = 2 * radius_ / x_size_;
+    floating_type subpixel_height = 2 * radius_ / y_size_;
 
     for (uint64_t sub_x = 0; sub_x < subpixel_resolution_; ++sub_x) {
         for (uint64_t sub_y = 0; sub_y < subpixel_resolution_; ++sub_y) {
