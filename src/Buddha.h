@@ -23,7 +23,7 @@ public:
         int num_threads;
     };
 
-    Buddha(const Params & p, const std::size_t thread_vector_size = 10 * 1024 * 1024);
+    Buddha(const Params & p, std::size_t thread_vector_size = 10 * 1024 * 1024);
 
     static Params get_empty_params();
 

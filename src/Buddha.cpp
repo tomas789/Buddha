@@ -14,6 +14,7 @@ Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
     if (max_iterations_ > thread_vector_size)
         throw MaxIterationsTooBigException();
 }
+
 Buddha::Params Buddha::get_empty_params() {
     Params p;
     p.num_threads = -1;
@@ -42,4 +43,9 @@ Buddha::complex_type Buddha::car2complex(uint64_t x, uint64_t y) const {
     floating_type re = radius_ * ( 2. / x_size_ * x - 1);
     floating_type im = radius_ * ( 2. / y_size_ * x - 1);
     return complex_type(re, im);
+}
+
+uint64_t Buddha::complex2lin(Buddha::complex_type c) const {
+    auto pair = complex2car(c);
+    return car2lin(pair.first, pair.second);
 }
