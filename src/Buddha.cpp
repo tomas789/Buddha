@@ -51,6 +51,13 @@ Buddha::complex_type Buddha::car2complex(uint64_t x, uint64_t y) const {
     return complex_type(re, im);
 }
 
+std::pair<uint64_t, uint64_t> Buddha::complex2car(
+    Buddha::complex_type c) const {
+    uint64_t x = (uint64_t)(x_size_ * (c.real() / radius_ + 1) / 2.);
+    uint64_t y = (uint64_t)(y_size_ * (c.imag() / radius_ + 1) / 2.);
+    return std::make_pair(x, y);
+}
+
 Buddha::complex_type Buddha::lin2complex(uint64_t pos) const {
    auto pair = lin2car(pos);
    return car2complex(pair.first, pair.second);
