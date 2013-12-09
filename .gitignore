@@ -1,5 +1,12 @@
+# internals
 build
 
+# C++ libraries
+**/CImg
+
+# vim
 **/.*.swp
+
+# compiler output
 **/a.out
 **/*.o
