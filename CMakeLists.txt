@@ -13,6 +13,7 @@ set (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2")
 
 set (SRC_FILES
   src/main.cpp
+  src/BuddhaWorker.cpp
 )
 
 add_executable (buddha ${SRC_FILES})
