@@ -36,6 +36,8 @@ void Buddha::worker(uint64_t from, uint64_t to) {
                 complex_type z = c;
 
                 uint64_t pos = 0;
+                // TODO: To use or not to use, that is the question.
+                // Deal with the merge conflict that arised here.
                 if (mandelbrot_hint(c))
                     continue;
 

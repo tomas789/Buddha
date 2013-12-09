@@ -33,6 +33,16 @@ public:
     virtual rgb color(uint64_t count, uint64_t max) const;
 };
 
+class ColorGrayscaleSqrtMixed : public ColoringSchema {
+public:
+    virtual rgb color(uint64_t count, uint64_t max) const;
+};
+
+class ColorSqrt : public ColoringSchema {
+public:
+    virtual rgb color(uint64_t count, uint64_t max) const;
+};
+
 class Buddha {
 public:
     typedef double floating_type;
