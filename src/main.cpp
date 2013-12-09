@@ -9,6 +9,7 @@ int main(int argc, char * argv[]) {
         params.radius = 2;
         params.max_iterations = 20;
         params.min_iterations = 5;
+        params.subpixel_resolution = 3;
 
         Buddha b(params);
         b.run();

@@ -43,6 +43,7 @@ public:
         floating_type radius;
         uint64_t max_iterations;
         uint64_t min_iterations;
+        uint64_t subpixel_resolution;
         int num_threads;
         ColoringSchema * schema;
     };
@@ -58,6 +59,7 @@ private:
     floating_type radius_;
     uint64_t max_iterations_;
     uint64_t min_iterations_;
+    uint64_t subpixel_resolution_;
     ColoringSchema * schema;
 
     std::vector<uint64_t> data_;

@@ -20,6 +20,7 @@ Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
     radius_ = p.radius;
     max_iterations_ = p.max_iterations;
     min_iterations_ = p.min_iterations;
+    subpixel_resolution_ = p.subpixel_resolution;
     schema = p.schema != nullptr
         ? p.schema
         : new ColorGrayscale;
