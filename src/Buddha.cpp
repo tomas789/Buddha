@@ -17,6 +17,8 @@ Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
 
     if (max_iterations_ > thread_vector_size)
         throw MaxIterationsTooBigException();
+
+    data_ = std::vector<uint64_t>(x_size_ * y_size_);
 }
 
 Buddha::Params Buddha::get_empty_params() {
