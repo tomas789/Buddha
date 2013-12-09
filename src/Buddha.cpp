@@ -13,6 +13,17 @@ rgb ColorGrayscale::color(uint64_t count, uint64_t max) const {
     return rgb({ v, v, v });
 }
 
+rgb ColorSqrt::color(uint64_t count, uint64_t max) const {
+    unsigned char v = 256. * std::sqrt(count) / std::sqrt(max);
+    return rgb({ v, v, v });
+}
+
+rgb ColorGrayscaleSqrtMixed::color(uint64_t count, uint64_t max) const {
+    unsigned char v1 = count / (double)max * 256.;
+    unsigned char v2 = 256. * std::sqrt(count) / std::sqrt(max);
+    return rgb({ v1, v2, 0 });
+}
+
 Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
   : thread_vector_size_(thread_vector_size) {
     x_size_ = p.width;
