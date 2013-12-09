@@ -9,7 +9,7 @@
 #include <utility>
 #include <vector>
 
-class MaxIterationsTooBig : public virtual std::exception { };
+class MaxIterationsTooBigException : public virtual std::exception { };
 
 class Buddha {
 public:
