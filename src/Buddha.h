@@ -6,6 +6,7 @@
 #include <exception>
 #include <mutex>
 #include <thread>
+#include <utility>
 #include <vector>
 
 class MaxIterationsTooBig : public virtual std::exception { };
@@ -30,6 +31,9 @@ public:
 private:
 	uint64_t x_size_;
 	uint64_t y_size_;
+    floating_type radius_;
+    uint64_t max_iterations_;
+
 	std::vector<uint64_t> data_;
 	std::mutex data_lock_;
 
