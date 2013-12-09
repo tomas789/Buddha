@@ -12,8 +12,10 @@ Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
     x_size_ = p.width;
     y_size_ = p.width;
     radius_ = p.radius;
-    num_threads_ = p.num_threads;
     max_iterations_ = p.max_iterations;
+    num_threads_ = p.num_threads > 0 
+        ? p.num_threads
+        : std::thread::hardware_concurrency();
 
     if (max_iterations_ > thread_vector_size)
         throw MaxIterationsTooBigException();
