@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cstdint>
 #include <utility>
 
@@ -38,7 +39,8 @@ void Buddha::run() {
     for (auto & t : threads_)
         t.join();
 
-    render();
+    auto img = render();
+    img.save("buddhabrot.png");
 }
 
 std::pair<uint64_t, uint64_t> Buddha::lin2car(uint64_t pos) const {
@@ -72,16 +74,20 @@ uint64_t Buddha::complex2lin(Buddha::complex_type c) const {
     return car2lin(pair.first, pair.second);
 }
 
-CImg<uint64_t> Buddha::render() {
+CImg<unsigned char> Buddha::render() {
     std::lock_guard<std::mutex> _(data_lock_);
-    CImg<uint64_t> img(x_size_, y_size_, 1, 1, 0);
+    CImg<unsigned char> img(x_size_, y_size_, 1, 1, 0);
+
+    uint64_t max = 0;
+    for (uint64_t i = 0; i < data_.size(); ++i) 
+        if (max < data_[i])
+            max = data_[i];
 
     for (uint64_t i = 0; i < data_.size(); ++i) {
         auto car = lin2car(i);
-        img.draw_point(car.first, car.second, &(data_[i]));
+        unsigned char c = data_[i] / (floating_type)max * 255;
+        img.draw_point(car.first, car.second, &c);
     }
-
-    img.save("buddhabrot.png");
 
     return img;
 }
