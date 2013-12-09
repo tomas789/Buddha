@@ -15,6 +15,8 @@ using namespace cimg_library;
 
 class MaxIterationsTooBigException : public virtual std::exception { };
 
+class MinGreaterThanMaxException : public virtual std::exception { };
+
 class Buddha {
 public:
     typedef double floating_type;
@@ -24,6 +26,7 @@ public:
         uint64_t width;
         floating_type radius;
         uint64_t max_iterations;
+        uint64_t min_iterations;
         int num_threads;
     };
 
@@ -37,6 +40,7 @@ private:
     uint64_t y_size_;
     floating_type radius_;
     uint64_t max_iterations_;
+    uint64_t min_iterations_;
 
     std::vector<uint64_t> data_;
     std::mutex data_lock_;
