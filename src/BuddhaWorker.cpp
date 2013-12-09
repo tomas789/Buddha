@@ -26,8 +26,7 @@ void Buddha::worker(uint64_t from, uint64_t to) {
             filled = 0;
         }
 
-        std::pair<uint64_t, uint64_t> coords = lin2car(i);
-        complex_type c = car2complex(coords.first, coords.second);
+        complex_type c = lin2complex(i);
         complex_type z = c;
 
         uint64_t pos = 0;
