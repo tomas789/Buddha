@@ -101,8 +101,13 @@ CImg<unsigned char> Buddha::render() {
         rgb c = schema->color(data_[i], max);
         unsigned char color[] = { c.r, c.g, c.b };
         img.draw_point(car.first, car.second, color);
-        img.draw_point(car.first, y_size_ - car.second, color);
+        img.draw_point(car.first, y_size_ - car.second - 1, color);
     }
 
     return img;
+}
+
+bool Buddha::mandelbrot_hint(complex_type z) const {
+    if (z.real() * z.real() + z.imag() * z.imag() <= 0.25) return true;
+    return false;
 }

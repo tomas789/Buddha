@@ -78,6 +78,8 @@ private:
     void worker(uint64_t from, uint64_t to);
     
     CImg<unsigned char> render();
+
+    bool mandelbrot_hint(complex_type z) const;
 };
 
 #endif // _BUDDHA_H

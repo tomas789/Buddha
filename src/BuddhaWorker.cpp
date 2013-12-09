@@ -30,6 +30,9 @@ void Buddha::worker(uint64_t from, uint64_t to) {
         complex_type z = c;
 
         uint64_t pos = 0;
+        if (mandelbrot_hint(c))
+            continue;
+
         while (z.real() * z.real() + z.imag() * z.imag() < radius_sqr
             && pos < max_iterations_) {
             // TODO: Possible optimization when computing abs(z)^2.
