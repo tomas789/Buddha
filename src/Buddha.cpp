@@ -53,7 +53,7 @@ uint64_t Buddha::car2lin(uint64_t x, uint64_t y) const {
 
 Buddha::complex_type Buddha::car2complex(uint64_t x, uint64_t y) const {
     floating_type re = radius_ * ( 2. / x_size_ * x - 1);
-    floating_type im = radius_ * ( 2. / y_size_ * x - 1);
+    floating_type im = radius_ * ( 2. / y_size_ * y - 1);
     return complex_type(re, im);
 }
 
