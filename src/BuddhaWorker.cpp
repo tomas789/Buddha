@@ -45,7 +45,7 @@ void Buddha::worker(uint64_t from, uint64_t to) {
             ++pos;
         }
 
-        if (pos >= min_iterations_ && pos <= max_iterations_) {
+        if (pos >= min_iterations_ && pos < max_iterations_) {
             filled += pos;
         }
     }
