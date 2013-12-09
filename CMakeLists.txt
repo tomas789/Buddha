@@ -1,6 +1,9 @@
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 2.8.8 FATAL_ERROR)
 
 project (Buddha)
+
+SET (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeModules")
+include (FindCImg)
 
 # Set the build type if it isn't already
 if (NOT CMAKE_BUILD_TYPE)
