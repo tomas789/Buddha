@@ -108,6 +108,8 @@ CImg<unsigned char> Buddha::render() {
 }
 
 bool Buddha::mandelbrot_hint(complex_type z) const {
+    complex_type unit(1, 0), four(4, 0);
+    if (std::abs(unit - std::sqrt(unit - four*z)) < 1) return true;
     if (z.real() * z.real() + z.imag() * z.imag() <= 0.25) return true;
     return false;
 }
