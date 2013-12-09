@@ -8,10 +8,6 @@
 #include <thread>
 #include <vector>
 
-#include "CImg.h"
-
-using namespace cimg_library;
-
 class MaxIterationsTooBig : public virtual std::exception { };
 
 class Buddha {
@@ -19,14 +15,14 @@ public:
 	typedef double floating_type;
 	typedef	std::complex<floating_type> complex_type; 
 
-	Buddha(const Params & p, const std::size_t thread_vector_size = 10 * 1024 * 1024);
-
 	struct Params {
 		uint64_t width;
 		floating_type radius;
 		uint64_t max_iterations;
 		int num_threads;
 	};
+
+	Buddha(const Params & p, const std::size_t thread_vector_size = 10 * 1024 * 1024);
 
 	static Params get_empty_params();
 

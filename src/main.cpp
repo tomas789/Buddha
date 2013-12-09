@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "Buddha.h"
+
 int main(int argc, char * argv[]) {
 
 	try {
