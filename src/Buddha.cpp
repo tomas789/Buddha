@@ -8,6 +8,11 @@ using namespace cimg_library;
 
 #include "Buddha.h"
 
+rgb ColorGrayscale::color(uint64_t count, uint64_t max) const {
+    unsigned char v = count / (double)max * 256.;
+    return rgb({ v, v, v });
+}
+
 Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
   : thread_vector_size_(thread_vector_size) {
     x_size_ = p.width;
@@ -15,6 +20,9 @@ Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
     radius_ = p.radius;
     max_iterations_ = p.max_iterations;
     min_iterations_ = p.min_iterations;
+    schema = p.schema != nullptr
+        ? p.schema
+        : new ColorGrayscale;
     num_threads_ = p.num_threads > 0 
         ? p.num_threads
         : std::thread::hardware_concurrency();
@@ -31,6 +39,7 @@ Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
 Buddha::Params Buddha::get_empty_params() {
     Params p;
     p.num_threads = -1;
+    p.schema = nullptr;
     return p;
 }
 
@@ -80,17 +89,19 @@ uint64_t Buddha::complex2lin(Buddha::complex_type c) const {
 
 CImg<unsigned char> Buddha::render() {
     std::lock_guard<std::mutex> _(data_lock_);
-    CImg<unsigned char> img(x_size_, y_size_, 1, 1, 0);
+    CImg<unsigned char> img(x_size_, y_size_, 1, 3, 0);
 
     uint64_t max = 0;
     for (uint64_t i = 0; i < data_.size(); ++i) 
         if (max < data_[i])
             max = data_[i];
 
-    for (uint64_t i = 0; i < data_.size(); ++i) {
+    for (uint64_t i = 0; i < data_.size() / 2; ++i) {
         auto car = lin2car(i);
-        unsigned char c = data_[i] / (floating_type)max * 255;
-        img.draw_point(car.first, car.second, &c);
+        rgb c = schema->color(data_[i], max);
+        unsigned char color[] = { c.r, c.g, c.b };
+        img.draw_point(car.first, car.second, color);
+        img.draw_point(car.first, y_size_ - car.second, color);
     }
 
     return img;

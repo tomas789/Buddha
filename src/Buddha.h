@@ -17,6 +17,22 @@ class MaxIterationsTooBigException : public virtual std::exception { };
 
 class MinGreaterThanMaxException : public virtual std::exception { };
 
+struct rgb {
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+};
+
+class ColoringSchema {
+public:
+    virtual rgb color(uint64_t count, uint64_t max) const = 0;
+};
+
+class ColorGrayscale : public ColoringSchema {
+public:
+    virtual rgb color(uint64_t count, uint64_t max) const;
+};
+
 class Buddha {
 public:
     typedef double floating_type;
@@ -28,6 +44,7 @@ public:
         uint64_t max_iterations;
         uint64_t min_iterations;
         int num_threads;
+        ColoringSchema * schema;
     };
 
     Buddha(const Params & p, std::size_t thread_vector_size = 10 * 1024 * 1024);
@@ -41,6 +58,7 @@ private:
     floating_type radius_;
     uint64_t max_iterations_;
     uint64_t min_iterations_;
+    ColoringSchema * schema;
 
     std::vector<uint64_t> data_;
     std::mutex data_lock_;
