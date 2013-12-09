@@ -24,7 +24,7 @@ Buddha::Params Buddha::get_empty_params() {
 void Buddha::run() {
     uint64_t part_size = x_size_ * y_size_ / num_threads_;
 
-    for (int i = 0; i < num_threads_; ++i)
+    for (std::size_t i = 0; i < num_threads_; ++i)
         threads_.emplace_back(&Buddha::worker, this, i * part_size, (i+1) * part_size);
 
     for (auto & t : threads_)
@@ -43,6 +43,11 @@ Buddha::complex_type Buddha::car2complex(uint64_t x, uint64_t y) const {
     floating_type re = radius_ * ( 2. / x_size_ * x - 1);
     floating_type im = radius_ * ( 2. / y_size_ * x - 1);
     return complex_type(re, im);
+}
+
+Buddha::complex_type Buddha::lin2complex(uint64_t pos) const {
+   auto pair = lin2car(pos);
+   return car2complex(pair.first, pair.second);
 }
 
 uint64_t Buddha::complex2lin(Buddha::complex_type c) const {
