@@ -43,6 +43,8 @@ private:
 	complex_type car2complex(uint64_t x, uint64_t y) const;
 	std::pair<uint64_t, uint64_t> complex2car(complex_type c) const;
 
+    uint64_t complex2lin(complex_type c) const;
+
 	const std::size_t thread_vector_size_;
 	std::size_t num_threads_;
 	std::vector<std::thread> threads_;
