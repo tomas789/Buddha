@@ -9,7 +9,7 @@ void Buddha::worker(uint64_t from, uint64_t to) {
     uint64_t filled = 0;
     std::vector<uint64_t> local_data(thread_vector_size_);
 
-    double radius_sqr = radius_ * radius_;
+    floating_type radius_sqr = radius_ * radius_;
 
     for (uint64_t i = from; i < to; ++i) {
         if (filled + max_iterations_ >= thread_vector_size_) {
