@@ -1,6 +1,10 @@
 #include <cstdint>
 #include <utility>
 
+#define cimg_display 0
+#include "CImg.h"
+using namespace cimg_library;
+
 #include "Buddha.h"
 
 Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
@@ -29,6 +33,8 @@ void Buddha::run() {
 
     for (auto & t : threads_)
         t.join();
+
+    render();
 }
 
 std::pair<uint64_t, uint64_t> Buddha::lin2car(uint64_t pos) const {
@@ -48,4 +54,11 @@ Buddha::complex_type Buddha::car2complex(uint64_t x, uint64_t y) const {
 uint64_t Buddha::complex2lin(Buddha::complex_type c) const {
     auto pair = complex2car(c);
     return car2lin(pair.first, pair.second);
+}
+
+CImg<uint64_t> Buddha::render() {
+    std::lock_guard<std::mutex> _(data_lock_);
+    CImg<uint64_t> img(x_size_, y_size_, 1, 1, 0);
+
+    img.save("buddhabrot.png");
 }

@@ -9,6 +9,10 @@
 #include <utility>
 #include <vector>
 
+#define cimg_display 0
+#include "CImg.h"
+using namespace cimg_library;
+
 class MaxIterationsTooBigException : public virtual std::exception { };
 
 class Buddha {
@@ -49,6 +53,8 @@ private:
     std::size_t num_threads_;
     std::vector<std::thread> threads_;
     void worker(uint64_t from, uint64_t to);
+    
+    CImg<unsigned char> render();
 };
 
 #endif // _BUDDHA_H
