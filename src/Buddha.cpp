@@ -65,5 +65,12 @@ CImg<uint64_t> Buddha::render() {
     std::lock_guard<std::mutex> _(data_lock_);
     CImg<uint64_t> img(x_size_, y_size_, 1, 1, 0);
 
+    for (uint64_t i = 0; i < data_.size(); ++i) {
+        auto car = lin2car(i);
+        img.draw_point(car.first, car.second, &(data_[i]));
+    }
+
     img.save("buddhabrot.png");
+
+    return img;
 }

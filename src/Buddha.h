@@ -55,7 +55,7 @@ private:
     std::vector<std::thread> threads_;
     void worker(uint64_t from, uint64_t to);
     
-    CImg<unsigned char> render();
+    CImg<uint64_t> render();
 };
 
 #endif // _BUDDHA_H
