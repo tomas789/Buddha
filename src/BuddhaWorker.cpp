@@ -5,6 +5,9 @@
 
 #include "Buddha.h"
 
+/**
+ *  TODO : Refactoring - move flushing of local_data to separate method
+ */
 void Buddha::worker(uint64_t from, uint64_t to) {
     uint64_t filled = 0;
     std::vector<uint64_t> local_data(thread_vector_size_);
