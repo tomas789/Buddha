@@ -94,7 +94,15 @@ void Buddha::run() {
 }
 
 void Buddha::log_printer() {
-    while (true) {
+    std::size_t counter = 0;
+    double all = x_size_ * y_size_ * subpixel_resolution_ * subpixel_resolution_;
+
+    while (++counter) {
+        if (counter % 10 == 0) {
+            log(LogPriority::NOTICE, 
+                "Done " + std::to_string(100. * progress_ / all) + "%");
+        }
+
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
         std::lock_guard<std::mutex> _(logitems_lock_);
         

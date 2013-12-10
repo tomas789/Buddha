@@ -1,5 +1,6 @@
 #include <complex>
 #include <cstdint>
+#include <sstream>
 #include <utility>
 #include <vector>
 
@@ -19,6 +20,9 @@ void Buddha::worker(uint64_t from, uint64_t to) {
     for (uint64_t sub_x = 0; sub_x < subpixel_resolution_; ++sub_x) {
         for (uint64_t sub_y = 0; sub_y < subpixel_resolution_; ++sub_y) {
             for (uint64_t i = from; i < to; ++i) {
+
+                progress_++;
+
                 if (filled + max_iterations_ >= thread_vector_size_) {
                     // Vector is full, flush the data.
                     std::unique_lock<std::mutex> _(data_lock_);

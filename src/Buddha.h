@@ -1,6 +1,7 @@
 #ifndef _BUDDHA_H
 #define _BUDDHA_H
 
+#include <atomic>
 #include <chrono>
 #include <complex>
 #include <cstdint>
@@ -85,6 +86,7 @@ private:
 
     std::vector<uint64_t> data_;
     std::mutex data_lock_;
+    std::atomic<std::uint_fast64_t> progress_;
 
     typedef std::tuple<
                 std::chrono::time_point<std::chrono::system_clock>,
