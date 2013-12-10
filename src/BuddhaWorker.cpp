@@ -12,6 +12,7 @@
 void Buddha::worker(uint64_t from, uint64_t to) {
     uint64_t filled = 0;
     std::vector<uint64_t> local_data(thread_vector_size_);
+    std::size_t progress_local = 0;
 
     floating_type radius_sqr = radius_ * radius_;
     floating_type subpixel_width  = 2 * radius_ / x_size_;
@@ -21,7 +22,7 @@ void Buddha::worker(uint64_t from, uint64_t to) {
         for (uint64_t sub_y = 0; sub_y < subpixel_resolution_; ++sub_y) {
             for (uint64_t i = from; i < to; ++i) {
 
-                progress_++;
+                ++progress_local;
 
                 if (filled + max_iterations_ >= thread_vector_size_) {
                     // Vector is full, flush the data.
@@ -63,6 +64,12 @@ void Buddha::worker(uint64_t from, uint64_t to) {
                 if (pos >= min_iterations_ && pos < max_iterations_) {
                     filled += pos;
                 }
+
+            }
+            
+            if (progress_local > 10000) {
+                progress_ += progress_local;
+                progress_local = 0;
             }
         }
     }

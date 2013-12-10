@@ -110,6 +110,10 @@ private:
     std::size_t num_threads_;
     std::vector<std::thread> threads_;
     void worker(uint64_t from, uint64_t to);
+    uint64_t next_batch_ = 0;
+    uint64_t batch_size_ = 1000;
+    std::mutex next_batch_lock_;
+    void worker_proxy();
     
     CImg<unsigned char> render();
 

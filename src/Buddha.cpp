@@ -74,7 +74,6 @@ Buddha::Params Buddha::get_empty_params() {
 }
 
 void Buddha::run() {
-    uint64_t part_size = x_size_ * y_size_ / num_threads_;
     
     std::thread logger(&Buddha::log_printer, this);
     logger.detach();
@@ -82,7 +81,7 @@ void Buddha::run() {
     log(LogPriority::NOTICE, "Rendering " + filename_);
 
     for (std::size_t i = 0; i < num_threads_; ++i)
-        threads_.emplace_back(&Buddha::worker, this, i * part_size, (i+1) * part_size);
+        threads_.emplace_back(&Buddha::worker_proxy, this);
 
     for (auto & t : threads_)
         t.join();
@@ -159,6 +158,26 @@ Buddha::complex_type Buddha::lin2complex(uint64_t pos) const {
 uint64_t Buddha::complex2lin(Buddha::complex_type c) const {
     auto pair = complex2car(c);
     return car2lin(pair.first, pair.second);
+}
+
+void Buddha::worker_proxy() {
+    while (true) {
+        next_batch_lock_.lock();
+        if (next_batch_ == x_size_ * y_size_) {
+            next_batch_lock_.unlock();
+            break;
+        }
+
+        uint64_t from = next_batch_;
+        if (next_batch_ + batch_size_ > x_size_ * y_size_)
+            next_batch_ = x_size_ * y_size_;
+        else
+            next_batch_ += batch_size_;
+        uint64_t to = next_batch_;
+
+        next_batch_lock_.unlock();
+        worker(from, to);
+    }
 }
 
 CImg<unsigned char> Buddha::render() {
