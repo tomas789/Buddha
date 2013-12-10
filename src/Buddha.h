@@ -49,6 +49,8 @@ public:
     typedef std::complex<floating_type> complex_type; 
 
     struct Params {
+        std::string name;
+        std::string format;
         uint64_t width;
         floating_type radius;
         uint64_t max_iterations;
@@ -70,6 +72,7 @@ private:
     uint64_t max_iterations_;
     uint64_t min_iterations_;
     uint64_t subpixel_resolution_;
+    std::string filename_;
     ColoringSchema * schema;
 
     std::vector<uint64_t> data_;

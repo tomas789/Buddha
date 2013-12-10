@@ -18,6 +18,7 @@ set (SRC_FILES
   src/main.cpp
   src/Buddha.cpp
   src/BuddhaWorker.cpp
+  src/ConfigLoader.cpp
 )
 
 add_executable (buddha ${SRC_FILES})

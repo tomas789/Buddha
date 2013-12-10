@@ -32,6 +32,7 @@ Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
     max_iterations_ = p.max_iterations;
     min_iterations_ = p.min_iterations;
     subpixel_resolution_ = p.subpixel_resolution;
+    filename_ = p.name + "." + p.format;
     schema = p.schema != nullptr
         ? p.schema
         : new ColorGrayscale;
@@ -65,7 +66,7 @@ void Buddha::run() {
         t.join();
 
     auto img = render();
-    img.save("buddhabrot.png");
+    img.save(filename_.c_str());
 }
 
 std::pair<uint64_t, uint64_t> Buddha::lin2car(uint64_t pos) const {
