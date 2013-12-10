@@ -1,6 +1,11 @@
+#include <ctime>
+#include <iomanip>
 #include <iostream>
+#include <chrono>
 #include <cstdint>
+#include <tuple>
 #include <utility>
+#include <queue>
 
 #define cimg_display 0
 #include "CImg.h"
@@ -22,6 +27,18 @@ rgb ColorGrayscaleSqrtMixed::color(uint64_t count, uint64_t max) const {
     unsigned char v1 = count / (double)max * 256.;
     unsigned char v2 = 256. * std::sqrt(count) / std::sqrt(max);
     return rgb({ v1, v2, 0 });
+}
+
+std::string Buddha::log_priority_name(LogPriority p) const {
+    switch (p) {
+        case LogPriority::ERROR: return "ERROR";
+        case LogPriority::WARNING: return "WARNING";
+        case LogPriority::NOTICE: return "NOTICE";
+        case LogPriority::INFO: return "INFO";
+        case LogPriority::DEBUG: return "DEBUG";
+    }
+
+    return "UNKNOWN";
 }
 
 Buddha::Buddha(const Params & p, const std::size_t thread_vector_size)
@@ -58,15 +75,51 @@ Buddha::Params Buddha::get_empty_params() {
 
 void Buddha::run() {
     uint64_t part_size = x_size_ * y_size_ / num_threads_;
+    
+    std::thread logger(&Buddha::log_printer, this);
+    logger.detach();
+
+    log(LogPriority::NOTICE, "Rendering " + filename_);
 
     for (std::size_t i = 0; i < num_threads_; ++i)
         threads_.emplace_back(&Buddha::worker, this, i * part_size, (i+1) * part_size);
 
     for (auto & t : threads_)
         t.join();
+    
+    log(LogPriority::NOTICE, "Rendering " + filename_ + " done");
 
     auto img = render();
     img.save(filename_.c_str());
+}
+
+void Buddha::log_printer() {
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::lock_guard<std::mutex> _(logitems_lock_);
+        
+        if (logitems_.empty())
+            continue;
+
+        while (!logitems_.empty()) {
+            auto item = logitems_.front();
+            logitems_.pop();
+
+            auto& out = std::get<1>(item) == LogPriority::ERROR ? std::cerr : std::cout;
+            std::time_t ttp = std::chrono::system_clock::to_time_t(std::get<0>(item));
+            struct tm *tm_now = localtime(&ttp);
+            std::string time = std::asctime(tm_now);
+            
+            out << log_priority_name(std::get<1>(item)) << " "
+                << time.substr(0, time.size() - 1) << "     "
+                << std::get<2>(item) << std::endl;
+        }
+    }
+}
+
+void Buddha::log(LogPriority p, std::string msg) {
+    std::lock_guard<std::mutex> _(logitems_lock_);
+    logitems_.push(std::make_tuple(std::chrono::system_clock::now(), p, msg));
 }
 
 std::pair<uint64_t, uint64_t> Buddha::lin2car(uint64_t pos) const {

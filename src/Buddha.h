@@ -1,13 +1,15 @@
 #ifndef _BUDDHA_H
 #define _BUDDHA_H
 
+#include <chrono>
 #include <complex>
 #include <cstdint>
 #include <exception>
 #include <mutex>
 #include <thread>
+#include <tuple>
 #include <utility>
-#include <vector>
+#include <queue>
 
 #define cimg_display 0
 #include "CImg.h"
@@ -60,6 +62,12 @@ public:
         ColoringSchema * schema;
     };
 
+    enum class LogPriority {
+        ERROR, WARNING, NOTICE, INFO, DEBUG
+    };
+
+    std::string log_priority_name(LogPriority p) const;
+
     Buddha(const Params & p, std::size_t thread_vector_size = 10 * 1024 * 1024);
 
     static Params get_empty_params();
@@ -78,6 +86,15 @@ private:
     std::vector<uint64_t> data_;
     std::mutex data_lock_;
 
+    typedef std::tuple<
+                std::chrono::time_point<std::chrono::system_clock>,
+                LogPriority,
+                std::string> logitem_type;
+    std::queue<logitem_type> logitems_;
+    std::mutex logitems_lock_;
+    void log_printer();
+    void log(LogPriority p, std::string msg);
+            
     std::pair<uint64_t, uint64_t> lin2car(uint64_t pos) const;
     uint64_t car2lin(uint64_t x, uint64_t y) const;
 
