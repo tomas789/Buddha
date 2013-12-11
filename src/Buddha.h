@@ -20,6 +20,8 @@ class MaxIterationsTooBigException : public virtual std::exception { };
 
 class MinGreaterThanMaxException : public virtual std::exception { };
 
+class NoColorProvidedException : public virtual std::exception { };
+
 struct rgb {
     unsigned char r;
     unsigned char g;
@@ -44,6 +46,15 @@ public:
 class ColorSqrt : public ColoringSchema {
 public:
     virtual rgb color(uint64_t count, uint64_t max) const;
+};
+
+class ColorGradient : public ColoringSchema {
+public:
+    virtual rgb color(uint64_t count, uint64_t max) const;
+    ColorGradient(const std::vector<rgb> & anchors);
+
+private:
+    std::vector<rgb> anchors_;
 };
 
 class Buddha {

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <ctime>
 #include <iomanip>
 #include <iostream>
@@ -12,6 +13,7 @@
 using namespace cimg_library;
 
 #include "Buddha.h"
+#include "Utility.hpp"
 
 rgb ColorGrayscale::color(uint64_t count, uint64_t max) const {
     unsigned char v = count / (double)max * 256.;
@@ -27,6 +29,40 @@ rgb ColorGrayscaleSqrtMixed::color(uint64_t count, uint64_t max) const {
     unsigned char v1 = count / (double)max * 256.;
     unsigned char v2 = 256. * std::sqrt(count) / std::sqrt(max);
     return rgb({ v1, v2, 0 });
+}
+
+rgb ColorGradient::color(uint64_t count, uint64_t max) const {
+    if (anchors_.size() == 1)
+        return anchors_.front();
+
+    double position = clamp(0., 1., (double)count / max);
+
+    if (position == 0.)
+        return anchors_.front();
+    if (position == 1.)
+        return anchors_.back();
+
+    double segment_length = 1. / (anchors_.size() - 1);
+    std::size_t start_segment = (std::size_t)(position / segment_length);
+    std::size_t end_segment = std::min(start_segment + 1, anchors_.size() - 1);
+    double segment_position = clamp(0., 1.,
+        (position - start_segment * segment_length) * 1. / segment_length);
+
+    rgb start = anchors_[start_segment];
+    rgb end = anchors_[end_segment];
+
+    return
+        { interpolate(start.r, end.r, segment_position)
+        , interpolate(start.g, end.g, segment_position)
+        , interpolate(start.b, end.b, segment_position)
+        };
+}
+
+ColorGradient::ColorGradient(const std::vector<rgb> & anchors) {
+    if (anchors.empty())
+        throw NoColorProvidedException();
+
+    anchors_ = anchors;
 }
 
 std::string Buddha::log_priority_name(LogPriority p) const {
