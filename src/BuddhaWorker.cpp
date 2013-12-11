@@ -32,7 +32,7 @@ void Buddha::worker(uint64_t from, uint64_t to) {
                 ++progress_local;
 
                 if (filled + max_iterations_ >= thread_vector_size_)
-                    flush_data(local_data, filled);                
+                    flush_data(local_data, filled);
 
                 complex_type c = lin2complex(i);
                 c.real(c.real() + sub_x * subpixel_width);
@@ -40,8 +40,6 @@ void Buddha::worker(uint64_t from, uint64_t to) {
                 complex_type z = c;
 
                 uint64_t pos = 0;
-                // TODO: To use or not to use, that is the question.
-                // Deal with the merge conflict that arised here.
                 if (mandelbrot_hint(c))
                     continue;
 
@@ -63,7 +61,6 @@ void Buddha::worker(uint64_t from, uint64_t to) {
                 if (pos >= min_iterations_ && pos < max_iterations_) {
                     filled += pos;
                 }
-
             }
 
             if (progress_local > 10000) {
