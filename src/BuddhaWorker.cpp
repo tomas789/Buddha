@@ -6,9 +6,16 @@
 
 #include "Buddha.h"
 
-/**
- *  TODO : Refactoring - move flushing of local_data to separate method
- */
+void Buddha::flush_data(std::vector<uint64_t> & data, uint64_t & filled) {
+    std::unique_lock<std::mutex> _(data_lock_);
+
+    for (uint64_t i = 0; i < filled; i++) {
+        data_[data[i]]++;
+    }
+
+    filled = 0;
+}
+
 void Buddha::worker(uint64_t from, uint64_t to) {
     uint64_t filled = 0;
     std::vector<uint64_t> local_data(thread_vector_size_);
@@ -24,16 +31,8 @@ void Buddha::worker(uint64_t from, uint64_t to) {
 
                 ++progress_local;
 
-                if (filled + max_iterations_ >= thread_vector_size_) {
-                    // Vector is full, flush the data.
-                    std::unique_lock<std::mutex> _(data_lock_);
-
-                    for (uint64_t j = 0; j < filled; ++j) {
-                        data_[local_data[j]]++;
-                    }
-
-                    filled = 0;
-                }
+                if (filled + max_iterations_ >= thread_vector_size_)
+                    flush_data(local_data, filled);                
 
                 complex_type c = lin2complex(i);
                 c.real(c.real() + sub_x * subpixel_width);
@@ -66,7 +65,7 @@ void Buddha::worker(uint64_t from, uint64_t to) {
                 }
 
             }
-            
+
             if (progress_local > 10000) {
                 progress_ += progress_local;
                 progress_local = 0;
@@ -74,11 +73,5 @@ void Buddha::worker(uint64_t from, uint64_t to) {
         }
     }
 
-    {
-        std::unique_lock<std::mutex> _(data_lock_);
-
-        for (uint64_t i = 0; i < filled; ++i) {
-            data_[local_data[i]]++;
-        }
-    }
+    flush_data(local_data, filled);
 }

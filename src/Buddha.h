@@ -113,6 +113,7 @@ private:
     uint64_t next_batch_ = 0;
     uint64_t batch_size_ = 1000;
     std::mutex next_batch_lock_;
+    void flush_data(std::vector<uint64_t> & data, uint64_t & filled);
     void worker_proxy();
     
     CImg<unsigned char> render();
