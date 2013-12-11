@@ -6,11 +6,11 @@
 
 #include "Buddha.h"
 
-void Buddha::flush_data(std::vector<uint64_t> & data, uint64_t & filled) {
+void Buddha::flush_data(std::vector<uint64_t> & local_data, uint64_t & filled) {
     std::unique_lock<std::mutex> _(data_lock_);
 
     for (uint64_t i = 0; i < filled; i++) {
-        data_[data[i]]++;
+        data_[local_data[i]]++;
     }
 
     filled = 0;
