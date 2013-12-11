@@ -46,7 +46,7 @@ rgb ColorGradient::color(uint64_t count, uint64_t max) const {
     std::size_t start_segment = (std::size_t)(position / segment_length);
     std::size_t end_segment = std::min(start_segment + 1, anchors_.size() - 1);
     double segment_position = clamp(0., 1.,
-        (position - start_segment * segment_length) * 1. / segment_length);
+        (position - start_segment * segment_length) / segment_length);
 
     rgb start = anchors_[start_segment];
     rgb end = anchors_[end_segment];
