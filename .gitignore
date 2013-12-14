@@ -10,3 +10,6 @@ build
 # compiler output
 **/a.out
 **/*.o
+
+# OS X
+**/.DS_Store
